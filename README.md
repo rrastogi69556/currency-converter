@@ -11,6 +11,7 @@
 - For simplicity, security is not implemented yet.
 - In order to make it simple enough, currency localization is limited to first value in "Accept-header" in the 
   convert API. Visit http://localhost:8092 for the Swagger documentation.
+- This API makes the converted amount to be readable by the user in human format given "Accept-header" is choosen as language(default en). If this API needs to be used by another API, small conversion from readable format with currency to number format is required by standard JAVA NumberFormat API.
 
 ## Build and Run:
 - PMD plugin is integrated with maven for static code analysis and force the developers to maintain the code best
