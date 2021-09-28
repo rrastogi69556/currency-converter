@@ -8,6 +8,7 @@
 ## Assumptions:
 
 - This is the back-end service that means you can run by Postman.
+- For simplicity, security is not implemented yet.
 - In order to make it simple enough, currency localization is limited to first value in "Accept-header" in the 
   convert API. Visit http://localhost:8092 for the Swagger documentation.
 
