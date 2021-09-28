@@ -38,7 +38,7 @@ Please make sure no servers are running as this applications uses below ports : 
 - In case you want to change the port, you can change the port from application.properties. <br/>
 - maven `settings.xml` - contains no proxy or anything, example:
 
-     <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    `<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
 	<localRepository/>
 	<interactiveMode/>
 	<usePluginRegistry/>
@@ -52,4 +52,4 @@ Please make sure no servers are running as this applications uses below ports : 
 	</mirrors>
 	<profiles/>
 	<activeProfiles/>
-    </settings>
+    </settings>`
