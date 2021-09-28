@@ -17,7 +17,7 @@
   practices at all times. In case it violates standard rules, it fails build.
 - In order to build the project go to the root dir which is the same directory where you are viewing this file.
 - go to the Terminal and type `mvn clean install` in order to start the build.
-  Once completed, go to `org.project.currencyconverter.service.CurrencyConverterServiceApplication` and right click -> Run this application
+  Once completed, go to `org.project.currencyconverter.CurrencyConverterServiceApplication` and right click -> Run this application
   
   - Snapshots: 
     - Build: 
