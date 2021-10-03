@@ -36,6 +36,7 @@
     - Build: 
   ![img.png](img.png)
     - Junits:
+      ![img_1.png](img_1.png)
     - Postman documentation:    
     ![img_7.png](img_7.png)
     - convert API: <br/>
