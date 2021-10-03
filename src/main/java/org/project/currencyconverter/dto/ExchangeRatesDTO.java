@@ -1,6 +1,7 @@
 package org.project.currencyconverter.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +25,7 @@ public class ExchangeRatesDTO
     private long timestamp;
     private String base;
     private String date;
-    private Map<String, Double> rates;
+    private Map<String, BigDecimal> rates;
 
 
     public void setDate(Date date)

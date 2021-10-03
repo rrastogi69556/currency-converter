@@ -1,30 +1,28 @@
 package org.project.currencyconverter.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.project.currencyconverter.model.ExchangeRates;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /*_________________________________________________________________________________
  | This class is used for transmission of Currency conversion state via REST API   |
  |_________________________________________________________________________________|
 */
-@JsonInclude(NON_NULL)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CurrencyConversionResponseDTO
+public class CurrencyConversionRequestDTO
 {
+    @JsonProperty("source_currency")
     private String sourceCurrency;
-    private ExchangeRates targetCurrency;
-    private BigDecimal monetaryValue;
-    private String convertedAmount;
+
+    @JsonProperty("target_currency")
+    private String targetCurrency;
+
+    @JsonProperty("monetary_value")
+    BigDecimal monetaryValue;
 }

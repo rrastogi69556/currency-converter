@@ -1,6 +1,7 @@
 package org.project.currencyconverter.controller;
 
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,9 @@ public class HomeControllerTest
 
 
     @Test
+    @DisplayName("Given site is up and running," +
+        " when accessed root url," +
+        "then redirected to swagger-ui documentation page ")
     public void testRedirectionToSwagger() throws Exception
     {
         this.mockMvc.perform(get("/"))

@@ -1,12 +1,14 @@
 package org.project.currencyconverter;
 
 import java.nio.charset.StandardCharsets;
+import javax.servlet.Filter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -42,6 +44,10 @@ public class CurrencyConverterServiceApplication {
 			.apiInfo(generateApiInfo());
 	}
 
+	@Bean
+	public Filter shallowEtagHeaderFilter() {
+		return new ShallowEtagHeaderFilter();
+	}
 
 	private ApiInfo generateApiInfo()
 	{

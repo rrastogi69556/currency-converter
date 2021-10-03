@@ -1,11 +1,14 @@
 package org.project.currencyconverter.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,7 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
-import org.project.currencyconverter.controller.CurrencyConverterController;
+
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -36,6 +40,9 @@ public class CurrencyConverterControllerTest
     @Mock
     private ICurrencyService currencyService;
 
+    @Mock
+    private ObjectMapper jsonMapper;
+
     @InjectMocks
     private CurrencyConverterController currencyConverterController;
 
@@ -48,29 +55,37 @@ public class CurrencyConverterControllerTest
     }
 
     @Test
+    @DisplayName("Given valid source,target currencies and monetary value is provided  " +
+        "when convert API is invoked" +
+        "then ok response with convertedAmount is returned")
     public void testGetConvertRates() throws Exception
     {
         SupportedSymbolsDTO supportedSymbolsDTO = new SupportedSymbolsDTO();
         supportedSymbolsDTO.setSuccess(true);
+
         Map<String,String> symbols = new LinkedHashMap<>();
         symbols.put("USD", "United Stated Dollar");
         symbols.put("EUR", "European Euro");
         supportedSymbolsDTO.setSymbols(symbols);
+
+        ResponseEntity<SupportedSymbolsDTO> entity = ResponseEntity.of(Optional.of(supportedSymbolsDTO));
         CacheUtils.getCache().putAll(symbols);
 
         ExchangeRatesDTO exchangeRatesDTO = new ExchangeRatesDTO();
         exchangeRatesDTO.setBase("EUR");
         exchangeRatesDTO.setDate(new Date());
-        exchangeRatesDTO.setTimestamp(Long.valueOf(2342343232L));
+        exchangeRatesDTO.setTimestamp(2342343232L);
         exchangeRatesDTO.setSuccess(true);
-        LinkedHashMap<String, Double> linkedHashMap = new LinkedHashMap();
-        linkedHashMap.put("AUD",  1.607026);
-        linkedHashMap.put("USD",  1.168637);
+        LinkedHashMap linkedHashMap = new LinkedHashMap();
+        linkedHashMap.put("AUD",  BigDecimal.valueOf(1.607026));
+        linkedHashMap.put("USD",  BigDecimal.valueOf(1.168637));
         exchangeRatesDTO.setRates(linkedHashMap);
+        String exchangeJson = new ObjectMapper().writeValueAsString(exchangeRatesDTO);
 
-        doNothing().when(currencyService).updateCacheLatestSupportedCurrencies();
-        when(restTemplate.getForEntity(anyString(), eq(SupportedSymbolsDTO.class))).thenReturn(ResponseEntity.of(Optional.of(supportedSymbolsDTO)));
-        when(restTemplate.getForEntity(anyString(), eq(ExchangeRatesDTO.class))).thenReturn(ResponseEntity.of(Optional.of(exchangeRatesDTO)));
+        doNothing().when(currencyService).updateETagAndDateCache(entity);
+        when(currencyService.fetchLatestSupportedCurrencies(anyString(), anyLong())).thenReturn(entity);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(ResponseEntity.ok(exchangeJson));
+        when(jsonMapper.readValue(anyString(), eq(ExchangeRatesDTO.class))).thenReturn(exchangeRatesDTO);
 
 
         mockMvc.perform(get("/v1/currency-converter/convert?sourceCurrency=EUR&targetCurrency=USD&monetaryValue=1")

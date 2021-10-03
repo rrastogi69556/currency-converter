@@ -1,5 +1,6 @@
 package org.project.currencyconverter.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.text.ParseException;
 import java.time.DateTimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +39,27 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
 
     }
 
+    @ExceptionHandler(ExchangeRatesException.class)
+    protected ResponseEntity<ApiResponse> handleException(ExchangeRatesException exception)
+    {
+        log.error("ExchangeRatesException", exception);
+        return getApiErrorResponseEntity(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
+
+    }
+
     @ExceptionHandler(HttpClientErrorException.class)
     protected ResponseEntity<ApiResponse> handleException(HttpClientErrorException exception)
     {
         log.error("HttpClientErrorException", exception);
         return getApiErrorResponseEntity(HttpStatus.valueOf(String.valueOf(exception.getStatusCode())), exception.getLocalizedMessage());
+
+    }
+
+    @ExceptionHandler(JsonProcessingException.class)
+    protected ResponseEntity<ApiResponse> handleException(JsonProcessingException exception)
+    {
+        log.error("JsonProcessingException", exception);
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
 
     }
 
@@ -80,7 +97,7 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(NullPointerException jpe)
     {
         log.error("NullPointerException", jpe);
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, jpe.getLocalizedMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, jpe.getMessage());
 
     }
 
