@@ -8,10 +8,11 @@
 ## Assumptions & Information:
 
 - This is the back-end service that means you can run in Postman in isolation. However, it has also a front-end 
-  module, you can use that to leverage this API using GUI.
+  module, you can use that to leverage this API using GUI [here](https://github.com/rrastogi69556/currency-converter-app.git).
 - This alpha version converts the currency into specific region format you pass as header ('Accept-Language'), if 
   you are running in isolation in Postman. However, you can directly select in the GUI for ease.
-- Please keep in mind that this application uses third party API (https://exchangeratesapi.io/documentation/) to 
+- Please keep in mind that this application uses third party API 
+  [exchangerates api](https://exchangeratesapi.io/documentation/) to 
   fetch rates which means currently, it uses free api key to fetch limited number of responses. If responses crosses 
   certain 
   number of threshold, external api return `429 - too many requests - Your monthly usage limit has been reached. Please upgrade your Subscription Plan.` error code.   

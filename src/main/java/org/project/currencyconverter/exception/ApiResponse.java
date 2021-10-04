@@ -3,7 +3,6 @@ package org.project.currencyconverter.exception;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
 
 /**
  * An holder of customized error codes.
@@ -14,13 +13,14 @@ public class ApiResponse implements Serializable
 {
 
     private static final long serialVersionUID = -9008234528570047907L;
-    private HttpStatus status;
+    private int statusCode;
     private String message;
 
 
-    public ApiResponse(HttpStatus status)
+
+    public ApiResponse(int statusCode)
     {
-        this.status = status;
+        this.statusCode = statusCode;
     }
 
 

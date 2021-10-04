@@ -27,7 +27,7 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(SupportedSymbolsException exception)
     {
         log.error("SupportedSymbolsException", exception);
-        return getApiErrorResponseEntity(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
+        return getApiErrorResponseEntity(exception.getStatusCode(), exception.getMessage());
 
     }
 
@@ -35,7 +35,7 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(CurrencyConversionException exception)
     {
         log.error("CurrencyConversionException", exception);
-        return getApiErrorResponseEntity(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
+        return getApiErrorResponseEntity(exception.getStatusCode(), exception.getMessage());
 
     }
 
@@ -43,15 +43,15 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(ExchangeRatesException exception)
     {
         log.error("ExchangeRatesException", exception);
-        return getApiErrorResponseEntity(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
+        return getApiErrorResponseEntity(exception.getStatusCode(), exception.getMessage());
 
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
-    protected ResponseEntity<ApiResponse> handleException(HttpClientErrorException exception)
+    protected ResponseEntity<ApiResponse> handleException(HttpClientErrorException exception) throws JsonProcessingException
     {
         log.error("HttpClientErrorException", exception);
-        return getApiErrorResponseEntity(HttpStatus.valueOf(String.valueOf(exception.getStatusCode())), exception.getLocalizedMessage());
+        return getApiErrorResponseEntity(exception.getRawStatusCode(), exception.getLocalizedMessage());
 
     }
 
@@ -59,7 +59,7 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(JsonProcessingException exception)
     {
         log.error("JsonProcessingException", exception);
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage());
 
     }
 
@@ -67,25 +67,25 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(DateTimeException exception)
     {
         log.error("DateTimeException", exception);
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, exception.getLocalizedMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getLocalizedMessage());
 
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<ApiResponse> handleException(IllegalArgumentException jpe) {
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, jpe.getMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(), jpe.getMessage());
 
     }
 
     @ExceptionHandler(ParseException.class)
     protected ResponseEntity<ApiResponse> handleException(ParseException jpe) {
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, jpe.getMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(), jpe.getMessage());
 
     }
 
-    private ResponseEntity<ApiResponse> getApiErrorResponseEntity(HttpStatus notFound, String message)
+    private ResponseEntity<ApiResponse> getApiErrorResponseEntity(int statusCode, String message)
     {
-        ApiResponse exception = new ApiResponse(notFound);
+        ApiResponse exception = new ApiResponse(statusCode);
         exception.setMessage(message);
         log.error(message);
         log.debug(message, exception);
@@ -97,13 +97,13 @@ public class ApiErrorHandler extends ResponseEntityExceptionHandler
     protected ResponseEntity<ApiResponse> handleException(NullPointerException jpe)
     {
         log.error("NullPointerException", jpe);
-        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, jpe.getMessage());
+        return getApiErrorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR.value(), jpe.getMessage());
 
     }
 
     private ResponseEntity<ApiResponse> buildResponseEntity(ApiResponse apiResponse)
     {
-        return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
+        return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(apiResponse.getStatusCode()));
     }
 
 }
